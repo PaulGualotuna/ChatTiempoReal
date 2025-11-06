@@ -1,31 +1,29 @@
+/* ==========================================
+   Estilos mínimos para el chat
+   - Caja de mensajes con scroll
+   - Mensajes de sistema con estilo tenue
+   ========================================== */
+
 body {
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-  text-align: center;
+  background: #f8f9fa;
 }
 
 #chat-box {
-  width: 80%;
-  height: 300px;
-  margin: 20px auto;
-  border: 2px solid #ccc;
-  background: white;
-  overflow-y: scroll;
-  padding: 10px;
+  height: 360px;
+  background: #fff;
+  padding: 12px;
+  overflow-y: auto;
 }
 
-input {
-  margin: 5px;
-  padding: 8px;
+.msg-row {
+  margin-bottom: 6px;
 }
 
-button {
-  padding: 8px 15px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
+.msg-row p {
+  margin: 0;
 }
-button:hover {
-  background-color: #45a049;
+
+.msg-row.sys p {
+  opacity: 0.7;
+  font-style: italic;
 }
