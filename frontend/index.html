@@ -5,20 +5,51 @@
   <title>Chat Tiempo Real</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Bootstrap opcional (tu versión) -->
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 
-  <!-- Socket.IO client servido por el backend -->
+  <!-- Socket.IO client -->
   <script src="/socket.io/socket.io.js"></script>
 </head>
-<body>
-  <div class="container py-4">
-    <div class="col-lg-6 col-md-8 mx-auto">
-      <h3 class="text-center mb-3">Chat en Tiempo Real</h3>
+<body class="app-bg">
+  <div class="app-wrapper container-fluid">
 
-      <!-- Sección de "login" simple -->
-      <div class="card mb-3">
+    <!-- Hero / Header -->
+    <header class="app-hero rounded-4 py-4 px-4 shadow-sm">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <!-- Logo -->
+          <div class="brand-logo">
+            <!-- Simple SVG chat bubble -->
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 12c0 3.866-3.806 7-8.5 7-.828 0-1.628-.09-2.378-.258L4 20l1.44-3.24C4.536 15.63 4 13.87 4 12 4 8.134 7.806 5 12.5 5S20 8.134 20 12Z" stroke="white" stroke-width="1.5" fill="white" fill-opacity=".15"/>
+              <circle cx="9.5" cy="12" r="1.25" fill="white"/>
+              <circle cx="12.5" cy="12" r="1.25" fill="white"/>
+              <circle cx="15.5" cy="12" r="1.25" fill="white"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="mb-0 fw-bold text-white">CHATLY</h3>
+            <div class="text-hero-subtitle">Chat en Tiempo Real</div>
+          </div>
+        </div>
+
+        <span class="badge rounded-pill bg-white text-hero px-3 py-2 shadow-sm">v3.0</span>
+      </div>
+    </header>
+
+    <!-- Alert (antes estaba en el footer) -->
+    <section class="pt-2">
+      <div class="alert alert-info alert-dismissible fade show mb-0 shadow-sm" role="alert">
+        <strong>Consejo:</strong> abre esta página en dos pestañas o en otro dispositivo de la misma red para probar la mensajería.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+      </div>
+    </section>
+
+    <!-- Barra de conexión -->
+    <section class="mb-3">
+      <div class="card shadow-sm border-0">
         <div class="card-body d-flex gap-2 align-items-center flex-wrap">
           <input id="usuario" class="form-control flex-grow-1" placeholder="Tu nombre de usuario" />
           <button id="btnLogin" class="btn btn-success">Conectar</button>
@@ -26,23 +57,64 @@
           <button id="btnClear" class="btn btn-outline-secondary ms-auto" disabled>Limpiar chat</button>
         </div>
       </div>
+    </section>
 
-      <!-- Área de mensajes -->
-      <div id="chat-box" class="border rounded"></div>
+    <!-- Main -->
+    <main class="row g-3 app-main align-items-stretch">
+      <!-- Sidebar -->
+      <aside class="col-12 col-md-4 col-lg-3">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body sidebar-body">
+            <div class="section-title">Usuarios conectados</div>
+            <div id="usersList" class="list-group small sidebar-scroll mb-3"></div>
 
-      <!-- Entrada de mensaje -->
-      <div class="input-group mt-3">
-        <input id="mensaje" type="text" class="form-control" placeholder="Escribe un mensaje..." disabled />
-        <button id="enviar" class="btn btn-primary" disabled>Enviar</button>
-      </div>
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="section-title mb-0">Salas activas</div>
+              <button id="btnNewRoom" class="btn btn-primary btn-sm" disabled>+ Sala</button>
+            </div>
+            <div id="roomsList" class="list-group small sidebar-scroll"></div>
+          </div>
+        </div>
+      </aside>
 
-      <p class="text-muted small mt-3">
-        Sugerencia: abre esta página en dos pestañas o en otro dispositivo de la misma red para probar la mensajería en tiempo real.
-      </p>
-    </div>
+      <!-- Chat -->
+      <section class="col-12 col-md-8 col-lg-9">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body chat-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <div class="section-title mb-1">Chat</div>
+                <h5 id="roomTitle" class="mb-0">Selecciona una sala…</h5>
+                <small id="roomSubtitle" class="text-muted"></small>
+              </div>
+              <div class="d-flex gap-2">
+                <button id="btnLeaveRoom" class="btn btn-outline-secondary btn-sm" disabled>Salir de sala</button>
+                <button id="btnClearChat" class="btn btn-outline-secondary btn-sm" disabled>Limpiar chat</button>
+              </div>
+            </div>
+
+            <div id="chat-box" class="chat-box rounded bg-white border"></div>
+
+            <div class="input-group mt-3">
+              <input id="mensaje" type="text" class="form-control" placeholder="Escribe un mensaje..." disabled />
+              <button id="enviar" class="btn btn-primary" disabled>Enviar</button>
+            </div>
+
+            <small class="text-muted mt-2 d-block">
+              Tip: crea una sala con “+ Sala” o haz clic en un usuario conectado para invitarlo.
+            </small>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="pt-3 pb-1">
+      <p class="text-center text-muted small mb-0">© <span id="cyear"></span> Chatly. Todos los derechos reservados.</p>
+    </footer>
   </div>
 
-    <!-- Modal genérico para mensajes -->
+  <!-- Modal -->
   <div class="modal fade" id="appModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -50,9 +122,7 @@
           <h5 class="modal-title" id="appModalLabel">Mensaje</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="appModalBody">
-          <!-- Aquí se inyecta el texto -->
-        </div>
+        <div class="modal-body" id="appModalBody"></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
@@ -60,9 +130,13 @@
     </div>
   </div>
 
-  <!-- Bootstrap JS (asegúrate de tenerlo al final del body) -->
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+  <!-- Tu JS -->
+  <script>
+    // año dinámico footer (no toca tu lógica)
+    document.getElementById('cyear').textContent = new Date().getFullYear();
+  </script>
   <script src="js/chat.js"></script>
 </body>
 </html>

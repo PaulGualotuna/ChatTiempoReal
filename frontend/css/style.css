@@ -1,29 +1,152 @@
-/* ==========================================
-   Estilos mínimos para el chat
-   - Caja de mensajes con scroll
-   - Mensajes de sistema con estilo tenue
-   ========================================== */
+/* ===== Base ===== */
+:root{
+  --app-bg: linear-gradient(180deg,#f6f9ff 0%, #f0f2f5 100%);
+  --card-radius: 1rem;
 
-body {
-  background: #f8f9fa;
+  /* Paleta hero / headers */
+  --hero-start: #0e2a47;        /* azul profundo */
+  --hero-end:   #113e63;        /* azul intermedio */
+  --hero-accent: #50e3c2;       /* turquesa acento */
+  --section-bg: #eff6ff;        /* banda más suave */
+  --section-border: #dbeafe;    /* borde sutil */
+  --section-text: #0b3a66;      /* texto de sección */
 }
 
-#chat-box {
-  height: 360px;
-  background: #fff;
+html, body { height: 100%; }
+
+/* En desktop, la página NO scrollea; scrollean las secciones internas */
+@media (min-width: 768px){
+  body{ overflow: hidden; }
+}
+
+.app-bg{ background: var(--app-bg); }
+
+.app-wrapper{
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;  /* hero, alert, barra, main, footer */
+  gap: .75rem;
+  padding-block: .75rem 1.25rem;
+}
+
+.app-main{ min-height: 0; }
+.app-main > *{ min-height: 0; }
+
+/* Cards */
+.card{ border-radius: var(--card-radius); }
+
+/* ====== HERO ====== */
+.app-hero{
+  background: linear-gradient(90deg, var(--hero-start) 0%, var(--hero-end) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.app-hero::after{
+  /* brillo suave */
+  content:"";
+  position:absolute; inset:-40% -20% auto auto;
+  width: 40rem; height: 40rem; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255,255,255,.15), transparent 70%);
+  transform: translate(10%, -10%);
+}
+.brand-logo{
+  width: 44px; height: 44px; min-width:44px;
+  border-radius: 12px;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.25);
+  box-shadow: inset 0 0 12px rgba(255,255,255,.08);
+}
+.text-hero-subtitle{
+  color: rgba(255,255,255,.9);
+  font-size: .95rem;
+  margin-top: .125rem;
+}
+.text-hero{
+  color: var(--hero-start);
+}
+
+/* ===== Encabezados de sección ===== */
+.section-title{
+  background: var(--section-bg);
+  color: var(--section-text);
+  border: 1px solid var(--section-border);
+  padding: .35rem .65rem;
+  border-radius: .5rem;
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  margin-bottom: .5rem;
+  display: inline-block;
+}
+
+/* ===== Sidebar ===== */
+.sidebar-body{
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidebar-scroll{
+  min-height: 0;
+  flex: 1 1 0;
+  overflow: auto;
+  border-radius: .5rem;
+}
+
+#usersList .list-group-item,
+#roomsList .list-group-item{
+  border: 0;
+  border-radius: .5rem;
+  margin-bottom: .5rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+
+#roomsList .list-group-item.active{
+  background: #e7f1ff;
+  color: #0a58ca;
+  border: 1px solid #cfe2ff;
+}
+
+.badge.online{ background: #16a34a !important; }
+.unread-badge{ background: #0a58ca; }
+
+/* ===== Chat ===== */
+.chat-body{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  height:100%;
+  overflow:hidden;
+}
+
+.chat-box{
   padding: 12px;
-  overflow-y: auto;
+  min-height: 0;
+  flex: 1 1 0;
+  overflow: auto;
+  background: #fff;
 }
 
-.msg-row {
-  margin-bottom: 6px;
+.msg-row{ margin-bottom: 6px; }
+.msg-row p{ margin: 0; }
+.msg-row.sys p{ opacity:.7; font-style: italic; }
+
+/* Toasts por encima del botón Enviar */
+.toast{ z-index: 2000; }
+#liveToast{
+  bottom: 96px !important;
+  right: 16px !important;
 }
 
-.msg-row p {
-  margin: 0;
+/* Pequeños ajustes móviles: la página puede scrollear */
+@media (max-width: 767.98px){
+  body{ overflow: auto; }
+  .sidebar-scroll{ max-height: 40vh; }
 }
 
-.msg-row.sys p {
-  opacity: 0.7;
-  font-style: italic;
-}
+/* Footer */
+footer p { opacity: .8; }

@@ -4,7 +4,8 @@
 node_modules/
 **/node_modules/
 npm-debug.log*
-yarn.lock
+yarn-debug.log*
+yarn-error.log*
 pnpm-lock.yaml
 
 # ==============================
@@ -38,3 +39,9 @@ build/
 Thumbs.db
 .vscode/
 .idea/
+
+# ==============================
+# Zips / temporales
+# ==============================
+*.zip
+*.tmp
